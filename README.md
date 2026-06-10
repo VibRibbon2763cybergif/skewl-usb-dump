@@ -2,7 +2,7 @@
 A dump for my open source school usb loaded in with treasures :D
 
 props to these students:
-squeakie salmon
+squeakie
 wessamsung
 hasan
 ali
