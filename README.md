@@ -29,3 +29,8 @@ my fav fish:
 seahorse
 
 i h8 skewl n why do they like preppy emojicats, kids music (specifically tiri tiri) and brainrot
+
+
+
+
+im not ready for year 7
