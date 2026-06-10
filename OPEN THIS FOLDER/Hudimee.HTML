@@ -1,0 +1,230 @@
+<marquee>Welcome to Hudimee</marquee>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hudimee</title>
+  <style>
+    body { font-family: Verdana, Verdana; margin: 0; padding: 0; background: #f8f8f8; }
+    header { background: #222; color: #fff; padding: 10px 20px; font-size: 24px; cursor: pointer; }
+    nav { background: #444; padding: 10px; color: #fff; }
+    #content { padding: 20px; }
+    .product { border: 1px solid #ccc; padding: 10px; margin: 10px; background: #fff; display: inline-block; width: 200px; text-align: center; }
+    .hidden { display: none; }
+    button { margin-top: 10px; }
+    input, select { margin: 5px 0; width: 95%; padding: 5px; }
+    .checkout-summary { border-top: 1px solid #ccc; margin-top: 10px; padding-top: 10px; }
+
+    /* 👇 replacement for <blink> */
+    .blink {
+      animation: blinker 1s step-start infinite;
+    }
+    @keyframes blinker {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header onclick="showHome()">Hudimee</header>
+  <nav>
+    <button onclick="showCart()">Cart (<span id="cartCount">0</span>)</button>
+    <button onclick="showWishlist()">Wishlist</button>
+    <button onclick="showSignin()">Sign In</button>
+    <span class="blink">Free Delivery</span>
+  </nav>
+  <div id="content"></div>
+
+  <script>
+    const products = {
+      wjjtab: { name: "Wjjtab", price: 300, description: "10.8-inch tablet for Wjjdoodling.", img: "manifesto/wjjtab.jpg" },
+      wjjphone: { name: "Wjj SHA-256 Mobile Phone", price: 500, description: "Available in 5 colors, 2 generations, with/without SD card, multiple memory options, 7 polyphonic ringtones, music from the Wiggles. miniSD sold seperately.", img: "manifesto/wjjphone.jpg", options: true },
+      wjjlaptop: { name: "Wjj Louis Vuitton Laptop", price: 900, description: "Luxury laptop by Wjj. Includes Wjj Zombies and video from the Wiggles", img: "manifesto/wjjlaptop.jpg" },
+      wjjmytv: { name: "Wjj myTV+", price: 450, description: "Smart TV experience. Includes video from the Wiggles", img: "manifesto/wjjmytv.jpg" },
+      wjju: { name: "Wjj U", price: 600, description: "The Wjj gaming console.", img: "manifesto/wjju.jpg" },
+      wjjpiano: { name: "Wjj Piano", price: 1200, description: "Digital piano by Wjj. Wiggles practice mode 60-day trial included.", img: "manifesto/wjjpiano.jpg" },
+      wjjcam: { name: "Wjjcam", price: 350, description: "Capture every Wjj moment.", img: "manifesto/wjjcam.jpg" },
+      wjjspeaker: { name: "Wjj Speaker", price: 200, description: "High-quality sound. Built in music from the Wiggles.", img: "manifesto/wjjspeaker.jpg" },
+      wjjeread: { name: "Wjj eRead", price: 250, description: "Read in Wjj style. Wiggles books included.", img: "manifesto/wjjeread.jpg" },
+      wjjcard: { name: "Wjj 2000😏 Gift Card", price: 50, description: "The ultimate gift card for everything Wjj.", img: "manifesto/wjjcard.jpg" },
+      wjjwjj: { name: "Wjjnav", price: 50, description: "Drive Wjj style, with built-in music and video from the Wiggles + stock photos and Wjj Zombies.", img: "manifesto/ruby.jpg" }
+    };
+
+    let cart = [];
+    let wishlist = [];
+
+    function showHome() {
+      let html = "<h2>Products</h2>";
+      for (let key in products) {
+        html += `<div class="product">
+          <img src="${products[key].img}" alt="${products[key].name}" width="100"><br>
+          <b>${products[key].name}</b><br>
+          ${products[key].description}<br>
+          Price: ${products[key].price} 😏<br>
+          <button onclick="viewProduct('${key}')">View</button>
+        </div>`;
+      }
+      document.getElementById("content").innerHTML = html;
+    }
+
+    function viewProduct(key) {
+      const p = products[key];
+      let html = `<h2>${p.name}</h2>
+        <img src="${p.img}" width="200"><br>
+        ${p.description}<br>
+        Price: ${p.price} 😏<br>`;
+      if (p.options) {
+        html += `
+          <label>Color:</label>
+          <select id="color">
+            <option>White</option><option>Red</option><option>Pink</option>
+            <option>Cyan</option><option>Black</option>
+          </select><br>
+          <label>Generation:</label>
+          <select id="generation"><option>Gen 1</option><option>Gen 2</option></select><br>
+          <label>SD Card Support:</label>
+          <select id="sd"><option>Yes</option><option>No</option></select><br>
+          <label>Memory:</label>
+          <select id="memory">
+            <option>1GB</option><option>2GB</option><option>4GB</option><option>8GB</option>
+            <option>16GB</option><option>32GB</option><option>64GB</option>
+          </select><br>`;
+      }
+      html += `
+        Quantity: <input type="number" id="qty" value="1" min="1"><br>
+        <button onclick="addToCart('${key}')">Add to Cart</button>
+        <button onclick="addToWishlist('${key}')">Add to Wishlist</button>`;
+      document.getElementById("content").innerHTML = html;
+    }
+
+    function addToCart(key) {
+      const qty = parseInt(document.getElementById("qty").value);
+      let options = {};
+      if (products[key].options) {
+        options = {
+          color: document.getElementById("color").value,
+          generation: document.getElementById("generation").value,
+          sd: document.getElementById("sd").value,
+          memory: document.getElementById("memory").value
+        };
+      }
+      cart.push({ key, qty, options });
+      document.getElementById("cartCount").innerText = cart.length;
+      alert("Added to cart!");
+    }
+
+    function addToWishlist(key) {
+      wishlist.push(key);
+      alert("Added to wishlist!");
+    }
+
+    function showCart() {
+      if (cart.length === 0) {
+        document.getElementById("content").innerHTML = "<h2>Cart is empty</h2>";
+        return;
+      }
+      let html = "<h2>Your Cart</h2>";
+      let subtotal = 0;
+      cart.forEach((item, i) => {
+        const p = products[item.key];
+        subtotal += p.price * item.qty;
+        html += `<div>
+          ${p.name} x ${item.qty} - ${p.price * item.qty} 😏<br>
+        </div>`;
+      });
+      html += `
+        <div class="checkout-summary">
+          <label>Promo Code:</label>
+          <input type="text" id="promo"><button onclick="applyPromo()">Apply</button><br>
+          <div id="summary"></div>
+          <button onclick="checkout()">Buy Now</button>
+          <button>Recharge Gift Card</button>
+        </div>`;
+      document.getElementById("content").innerHTML = html;
+      updateSummary(subtotal);
+    }
+
+    let discount = 0;
+
+    function applyPromo() {
+      const code = document.getElementById("promo").value;
+      if (code === "HeyThereCookie2763") {
+        discount = 0.5;
+        alert("Promo code applied! 50% off.");
+      } else {
+        discount = 0;
+        alert("Invalid promo code.");
+      }
+      showCart();
+    }
+
+    function updateSummary(subtotal) {
+      let total = subtotal;
+      let discountAmount = 0;
+      if (discount > 0) {
+        discountAmount = subtotal * discount;
+        total = subtotal - discountAmount;
+      }
+      document.getElementById("summary").innerHTML = `
+        Subtotal: ${subtotal} 😏<br>
+        Discount: ${discountAmount} 😏<br>
+        Final Total: ${total} 😏<br>`;
+    }
+
+    function checkout() {
+      let subtotal = cart.reduce((sum, item) => sum + products[item.key].price * item.qty, 0);
+      let discountAmount = discount > 0 ? subtotal * discount : 0;
+      let total = subtotal - discountAmount;
+      document.getElementById("content").innerHTML = `<h2>Thank you for your order!</h2>
+        Subtotal: ${subtotal} 😏<br>
+        Discount: ${discountAmount} 😏<br>
+        Final Total Paid: ${total} 😏<br>`;
+      cart = [];
+      document.getElementById("cartCount").innerText = 0;
+    }
+
+    function showWishlist() {
+      if (wishlist.length === 0) {
+        document.getElementById("content").innerHTML = "<h2>Wishlist is empty</h2>";
+        return;
+      }
+      let html = "<h2>Your Wishlist</h2>";
+      wishlist.forEach((key) => {
+        const p = products[key];
+        html += `<div>${p.name} - ${p.price} 😏</div>`;
+      });
+      document.getElementById("content").innerHTML = html;
+    }
+
+    function showSignin() {
+      document.getElementById("content").innerHTML = `
+        <h2>Sign In</h2>
+        <form onsubmit="return validateSignin()">
+          <input type="text" id="name" placeholder="Full name*" required><br>
+          <input type="text" id="email" placeholder="Email*" required><br>
+          <input type="password" id="password" placeholder="Password*" required>
+          <button type="button" onclick="togglePassword()">Show/Hide</button><br>
+          <input type="number" id="cc" placeholder="Credit Card No.*" required><br>
+          <input type="number" id="cvc" placeholder="CvC*" required><br>
+          <input type="number" id="gc" placeholder="Gift Card No."><br>
+          <input type="text" id="address" placeholder="Address*" required><br>
+          <input type="number" id="wjjid" placeholder="Wjj ID*" required><br>
+          <input type="number" id="fone" placeholder="Phone No.*" required><br>
+          <button type="submit">Sign In</button>
+        </form>`;
+    }
+
+    function validateSignin() {
+      alert("Signed in successfully!");
+      return false;
+    }
+
+    function togglePassword() {
+      const pass = document.getElementById("password");
+      pass.type = pass.type === "password" ? "text" : "password";
+    }
+
+    showHome();
+  </script>
+</body>
+</html>
+(c) 2017

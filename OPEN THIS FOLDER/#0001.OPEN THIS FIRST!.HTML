@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SMASNUG EULA Portal</title>
+  <style>
+    body { 
+      background-color: black; 
+      color: lime; 
+      font-family: monospace; 
+      text-align: center; 
+      margin-top: 50px; 
+    }
+    input[type="number"] { 
+      background-color: #111; 
+      color: lime; 
+      border: 1px solid lime; 
+      padding: 5px; 
+      margin: 10px; 
+    }
+    label { display: block; margin: 5px 0; }
+    .button { 
+      background-color: lime; 
+      color: black; 
+      border: none; 
+      padding: 10px 20px; 
+      margin-top: 10px; 
+      cursor: pointer; 
+    }
+    .button:hover { background-color: red; color: white; }
+  </style>
+</head>
+<body>
+
+  <h1>⚠️ SMASNUG EULA Agreement ⚠️</h1>
+  <p>This system is monitored by the Gulag of Wjj.</p>
+
+  <form id="eulaForm">
+    <label for="phone">Enter Phone Number to Proceed:</label>
+    <input type="number" id="phone" name="phone" placeholder="Enter phone number" required>
+
+    <label><input type="checkbox" id="cb1"> I love Wjj</label>
+    <label><input type="checkbox" id="cb2"> I will not impersonate Princess Needle</label>
+    <label><input type="checkbox" id="cb3"> I acknowledge Princess Needle is real</label>
+    <label><input type="checkbox" id="cb4"> I will not wear or tolerate bodycon dresses</label>
+
+    <br><button type="submit" class="button">Sign On</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('eulaForm');
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // stop default submission
+
+      const phoneFilled = document.getElementById('phone').value.trim() !== "";
+      const cb1 = document.getElementById('cb1').checked;
+      const cb2 = document.getElementById('cb2').checked;
+      const cb3 = document.getElementById('cb3').checked;
+      const cb4 = document.getElementById('cb4').checked;
+
+      if (phoneFilled && cb1 && cb2 && cb3 && cb4) {
+        // All conditions met → go to Google
+        window.location.href = "https://dns.google";
+      } else {
+        // Any condition missing → Rickroll
+        window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+      }
+    });
+  </script>
+
+</body>
+</html>
